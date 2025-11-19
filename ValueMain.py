@@ -1,6 +1,7 @@
 import numpy as np
 import env
 from CoalitionFun import * # 导入 CoalitionFun 模块中的函数
+from Belief_fusion import *
 
 
 class ValueData:
@@ -72,7 +73,6 @@ def CoalitionMain(agents, tasks, Graph, world):
 
         # 一次联盟迭代 
 
-        
         Value_data = CoalitionIteration(agents, tasks, Value_data, Value_Params, Graph)
 
         # TODO: 
@@ -81,14 +81,8 @@ def CoalitionMain(agents, tasks, Graph, world):
         # TODO: 个体观测矩阵更新 
 
 
-        # TODO:  根据观测矩阵进行信念融合 得到新的信念
-        # 4. 与邻居通信进行信息融合
-        # 包括与邻居进行证据合并 
-        # 各个节点按照权重矩阵进行线性共识更新
-        # 然后一致的信念恢复
-        # 得到全局一致的稳定的信念
-
-
+        # TODO: 根据观测矩阵进行信念融合
+        robot_beliefs = belief_fusion_update(robot_beliefs, observation_matrix, neighbors, weight_matrix)
 
         # TODO: 计算 Rcost、cost_sum、net_profit
 

@@ -1,4 +1,7 @@
 # CoalitionFunction.py
+# 跟联盟形成联盟有关的函数 
+# 联盟排序
+# 联盟通信
 import numpy as np
 
 
@@ -32,9 +35,9 @@ def CoalitionIteration(agents, tasks, Value_data, Value_Params, Graph):
         curnumberrow = np.zeros(N)  # 当前任务索引（TODO: 根据 Value_order 输出修改）
 
         for agent_idx in range(N):
-            # TODO: 调用 Value_order 实现任务选择
-            inc, cur_row, updated_agent_data = Value_order(
-                agents, tasks, Value_data[agent_idx], Value_Params
+            # TODO: 调用 Coalition_order 实现任务选择
+            inc, cur_row, updated_agent_data = Coalition_order(
+                agents, tasks, Value_data[agent_idx], Value_Params, Graph
             )
 
             incremental[agent_idx] = inc
@@ -56,7 +59,7 @@ def CoalitionIteration(agents, tasks, Value_data, Value_Params, Graph):
         # 3. 邻居 agent 通信
         # TODO: Value_communication 完成邻居间联盟结构同步
         # 
-        Value_data = Value_communication(agents, tasks, Value_data, Value_Params, Graph)
+        Value_data = Coalition_communication(agents, tasks, Value_data, Value_Params, Graph)
 
         # =========================
         # 4. 与邻居通信进行信息融合
@@ -73,7 +76,7 @@ def CoalitionIteration(agents, tasks, Value_data, Value_Params, Graph):
 # ==============================
 # Value_order 函数
 # 计算联盟结构和任务选择
-def Value_order(agents, tasks, agent_data, Value_Params, Graph):
+def Coalition_order(agents, tasks, agent_data, Value_Params, Graph):
     """
     每个 agent 自主选择任务，计算增量和当前任务索引
 
@@ -131,7 +134,7 @@ def Value_order(agents, tasks, agent_data, Value_Params, Graph):
 # ==============================
 # Value_communication 函数
 # 通信函数
-def Value_communication(agents, tasks, Value_data, Value_Params, Graph):
+def Coalition_communication(agents, tasks, Value_data, Value_Params, Graph):
     """
     邻居 agent 间通信，更新每个 agent 的联盟结构和相关信息。
     对应 MATLAB 中的 Value_communication 函数。
