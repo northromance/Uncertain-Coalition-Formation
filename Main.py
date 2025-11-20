@@ -18,6 +18,8 @@ random.seed(SEED)     # 设置Python内置随机库种子
 # 机器人和任务数量
 N = 5  # 机器人数量
 M = 5   # 任务数量
+K = 3 # 任务类型个数
+init_belief_value = 1/3 # 初始信念值
 
 # 任务初始化
 # 初始化位置和价值
@@ -35,7 +37,7 @@ agents = [Agent(i+1, np.random.randint(0,101), np.random.randint(0,101), vel, fu
 world = env.World(XMIN=0, XMAX=100, YMIN=0, YMAX=100, ZMIN=0, ZMAX=0, N=N, M=M)
 
 # 构造参数对象
-Value_Params = ValueParams(N, M)
+Value_Params = ValueParams(N, M, K, init_belief_value)
 
 p, result = utility.Value_graph(agents, Value_Params)
 
@@ -59,6 +61,6 @@ print(Graph)
 
 # 形成联盟
 
-[Value_data,Rcost,cost_sum,net_profit, initial_coalition]= ValueMain.CoalitionMain(agents,tasks,Graph,world)
+[Value_data,Rcost,cost_sum,net_profit, initial_coalition]= ValueMain.CoalitionMain(agents,tasks,Graph,world,Value_Params)
 
 # 可视化

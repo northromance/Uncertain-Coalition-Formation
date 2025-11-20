@@ -18,5 +18,6 @@ def belief_fusion_update(robot_beliefs, observation_matrix, neighbors, weight_ma
 
     # TODO: 4. 在共识收敛后，恢复一致的信念（将 log-belief / mass 转回概率或信念表示）
 
+
     # TODO: 5. 返回收敛后的稳定信念
     return None

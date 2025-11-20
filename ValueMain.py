@@ -2,33 +2,14 @@ import numpy as np
 import env
 from CoalitionFun import * # 导入 CoalitionFun 模块中的函数
 from Belief_fusion import *
+from env import ValueData, ValueParams
 
-
-class ValueData:
-    """
-    ValueData 类用于存储每个 agent 的状态信息，
-    包括联盟结构、任务信念以及观测矩阵，
-    对应 MATLAB 中的 Value_data(i) 结构体。
-    """
-    def __init__(self, agent, N, M):
-        self.agentID = agent.id            # agent 编号
-        self.agentIndex = agent.id         # agent 索引
-        self.iteration = 0                 # 联盟改变次数
-        self.unif = 0                      # 均匀随机变量
-
-        self.coalitionstru = np.zeros((M+1, N), dtype=int)  # 联盟矩阵 (M+1 行, N 列)
-        self.initbelief = np.zeros((M+1, 3))               # 初始信念矩阵 (M+1 x 3)
-        for j in range(M):
-            self.initbelief[j, :] = [1/3, 1/3, 1/3]       # 每个任务三种类型概率均等
-
-        self.observe = np.zeros((M, 3))      # 当前观测矩阵
-        self.preobserve = np.zeros((M, 3))   # 上一轮观测矩阵
 
 
 # =========================
 # CoalitionMain 联盟形成主函数
 # =========================
-def CoalitionMain(agents, tasks, Graph, world):
+def CoalitionMain(agents, tasks, Graph, world, ValueParams):
     """
     初始化 Value_data、资源成本、总成本、净收益和初始联盟
 
@@ -46,9 +27,12 @@ def CoalitionMain(agents, tasks, Graph, world):
     """
     N = world.N
     M = world.M
-    
+    K = ValueParams.K
+    init_belief_value = ValueParams.init_belief_value
+
+
     # 初始化 Value_data
-    Value_data = [ValueData(agent, N, M) for agent in agents]
+    Value_data = [ValueData(agent, N, M, K, init_belief_value) for agent in agents]
     
     # 所有 agent 放入 "void 任务" 中（最后一行）
     for k in range(N):
@@ -64,19 +48,12 @@ def CoalitionMain(agents, tasks, Graph, world):
     for counter in range(50):
 
         # TODO: 保存每轮初始 belief
-        for i in range(N):
-            for j in range(M):
-                # 假设 tasks[j] 有 prob 属性
-                if not hasattr(Value_data[i].tasks[j], 'prob'):
-                    Value_data[i].tasks[j].prob = np.zeros((50, 3))
-                Value_data[i].tasks[j].prob[counter, :] = Value_data[i].initbelief[j, :]
 
         # 一次联盟迭代 
 
         Value_data = CoalitionIteration(agents, tasks, Value_data, Value_Params, Graph)
 
         # TODO: 
-
 
         # TODO: 个体观测矩阵更新 
 

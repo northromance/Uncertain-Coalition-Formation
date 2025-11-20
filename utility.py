@@ -13,7 +13,6 @@ def Value_graph(agents, Value_Params):
         result: 一个 3 x M 的列表，每列是 [起点, 终点, 权重]
     """
     
-
     N = Value_Params.N 
     
     # 1. 初始化距离矩阵
